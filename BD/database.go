@@ -11,8 +11,8 @@ func CreateDB(conn *pgx.Conn, ctx context.Context) {
 	sqlQuery := `
 	CREATE TABLE IF NOT EXISTS newTask (
 		id SERIAL PRIMARY KEY,
-		email TEXT, 
-		password TEXT
+		email VARCHAR(255) UNIQUE, 
+		password TEXT UNIQUE
 	);
 	`
 	_, err := conn.Exec(ctx, sqlQuery)
