@@ -17,10 +17,12 @@ func (conn *Connection) Registr(w http.ResponseWriter, r *http.Request) {
 		INSERT INTO newTask (email, password)
 		VALUES ($1,$2)
 	`
-	_, err = conn.Connect.Exec(r.Context(), sqlQuery, user.Email, user.Password)
+	_, err = conn.Connect.Exec(r.Context(), sqlQuery, &user.Email, &user.Password)
 	if err != nil {
 		fmt.Println("to db", err)
+		json.NewEncoder(w).Encode("ошибка")
+	} else {
+		json.NewEncoder(w).Encode("данные сохранены")
 	}
-	json.NewEncoder(w).Encode("данные сохранены")
 
 }
