@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 // мне надо юзера расшифровать и
@@ -14,22 +16,19 @@ func (conn *Connection) Login(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("decode", err)
 	}
 	sqlQuery := `
-		SELECT email,password FROM newTask 
+		SELECT password FROM newTask 
 		WHERE email = $1
 	`
 	var passWord string
-	var email string
-	err = conn.Connect.QueryRow(r.Context(), sqlQuery, &userLogin.Email).Scan(&email, &passWord)
+	err = conn.Connect.QueryRow(r.Context(), sqlQuery, userLogin.Email).Scan(&passWord)
 	if err != nil {
-		fmt.Println("not email", err)
-		json.NewEncoder(w).Encode("not email")
-	} else {
-		json.NewEncoder(w).Encode("email is ready")
+		fmt.Println("NOT POCHTA")
 	}
-	if userLogin.Password == passWord {
-		json.NewEncoder(w).Encode("вошел")
-	} else {
-		json.NewEncoder(w).Encode("неверный пароль")
+	err = bcrypt.CompareHashAndPassword([]byte(passWord), []byte(userLogin.Password))
+	if err != nil {
+		fmt.Println("not pass", err)
+		json.NewEncoder(w).Encode("not true password")
+		return
 	}
-
+	json.NewEncoder(w).Encode("GOOD")
 }
