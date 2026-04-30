@@ -10,3 +10,8 @@ type User struct {
 type Connection struct {
 	Connect *pgx.Conn
 }
+
+type UserLogin struct {
+	Email    string `json:"username"`
+	Password string `json:"password"`
+}

@@ -23,6 +23,7 @@ func main() {
 	bd.CreateDB(conn, ctx)
 	router := mux.NewRouter()
 	router.Path("/registr").HandlerFunc(connect.Registr)
+	router.Path("/login").Methods("GET").HandlerFunc(connect.Login)
 	fmt.Println("server is ready")
 	if err := http.ListenAndServe(":9091", router); err != nil {
 		fmt.Println("server", err)
