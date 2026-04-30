@@ -22,13 +22,14 @@ func (conn *Connection) Login(w http.ResponseWriter, r *http.Request) {
 	var passWord string
 	err = conn.Connect.QueryRow(r.Context(), sqlQuery, userLogin.Email).Scan(&passWord)
 	if err != nil {
+		json.NewEncoder(w).Encode("NOT TRUE POCHTA")
 		fmt.Println("NOT POCHTA")
+		return
 	}
 	err = bcrypt.CompareHashAndPassword([]byte(passWord), []byte(userLogin.Password))
 	if err != nil {
-		fmt.Println("not pass", err)
-		json.NewEncoder(w).Encode("not true password")
+		json.NewEncoder(w).Encode("NOT TRUE PASS")
 		return
 	}
-	json.NewEncoder(w).Encode("GOOD")
+	fmt.Println("ALL GOOF")
 }
