@@ -25,8 +25,8 @@ func (conn *Connection) Registr(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println("to db", err)
 		http.Error(w, "ошибка", http.StatusNotFound)
-	} else {
-		json.NewEncoder(w).Encode("данные сохранены")
+		return
 	}
+	json.NewEncoder(w).Encode("данные сохранены")
 
 }
